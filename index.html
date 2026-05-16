@@ -385,7 +385,6 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const TOTAL=969;
 const TEAMS=[
   // GRUPO A
-  {name:"FWC",flag:FWC",code:"FWC",n:20,group:"A"},
   {name:"México",flag:"🇲🇽",code:"MEX",n:20,group:"A"},
   {name:"Sudáfrica",flag:"🇿🇦",code:"RSA",n:20,group:"A"},
   {name:"Corea del Sur",flag:"🇰🇷",code:"KOR",n:20,group:"A"},
@@ -446,7 +445,7 @@ const TEAMS=[
   {name:"Croacia",flag:"🇭🇷",code:"CRO",n:20,group:"L"},
   {name:"RD Congo",flag:"🇨🇩",code:"COD",n:20,group:"L"},
 ];
-{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
+const ESPECIALES=[{name:"FWC",flag:"🌍",code:"FWC",n:9,stickers:Array.from({length:9},(_,i)=>"FWC-"+(i+1))},{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
 const CRACKS=[{name:"Los Cracks",flag:"⚽",code:"CRK",n:24,stickers:Array.from({length:24},(_,i)=>"CRK-"+(i+1))}];
 TEAMS.forEach(t=>{t.stickers=Array.from({length:t.n},(_,i)=>t.code+"-"+(i+1));});
 
