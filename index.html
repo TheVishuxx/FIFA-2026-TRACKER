@@ -239,12 +239,9 @@ nav{padding:10px 10px;flex:1}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio
         </div>
         <div class="nav-item" onclick="goPage('paises',this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>Países
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>Países y Especiales
         </div>
         <div class="nav-section">Colección</div>
-        <div class="nav-item" onclick="goPage('especiales',this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>Especiales
-        </div>
         <div class="nav-item" onclick="goPage('cracks',this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cracks
         </div>
@@ -320,7 +317,7 @@ nav{padding:10px 10px;flex:1}
 
       <!-- PAÍSES -->
       <div class="page" id="page-paises">
-        <div class="page-title">Países</div>
+        <div class="page-title">Países y Especiales</div>
         <div class="page-sub">Toca una figurita para marcarla como obtenida</div>
         <div class="countries-header">
           <input class="search-box" type="text" placeholder="🔍  Buscar país..." id="country-search" oninput="renderCountries()"/>
@@ -331,12 +328,10 @@ nav{padding:10px 10px;flex:1}
           </div>
         </div>
         <div class="countries-grid" id="countries-grid"></div>
-      </div>
-
-      <!-- ESPECIALES -->
-      <div class="page" id="page-especiales">
-        <div class="page-title">Especiales</div>
-        <div class="page-sub">Figuritas especiales del álbum</div>
+        <div style="display:flex;align-items:center;gap:10px;margin:28px 0 14px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);background:var(--orange-glow);border:1px solid rgba(249,115,22,0.25);padding:4px 14px;border-radius:999px">ESPECIALES</div>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
         <div class="countries-grid" id="esp-grid"></div>
       </div>
 
@@ -350,20 +345,50 @@ nav{padding:10px 10px;flex:1}
       <!-- COSTOS -->
       <div class="page" id="page-costos">
         <div class="page-title">Costos</div>
-        <div class="page-sub">Calcula cuánto has gastado en el álbum</div>
+        <div class="page-sub">Calcula cuánto has gastado en el álbum — precios en pesos chilenos</div>
+
         <div class="cost-card">
-          <div class="cost-title">💰 Calculadora de gasto</div>
-          <div class="cost-row"><div class="cost-label">Precio por sobre</div><input class="cost-input" type="number" id="precio-sobre" value="500" onchange="calcCostos()"/></div>
-          <div class="cost-row"><div class="cost-label">Figuritas por sobre</div><input class="cost-input" type="number" id="figs-sobre" value="5" onchange="calcCostos()"/></div>
-          <div class="cost-row"><div class="cost-label">Figuritas obtenidas</div><div class="cost-value" id="c-obtenidas">0</div></div>
-          <div class="cost-row"><div class="cost-label">Sobres abiertos (est.)</div><div class="cost-value" id="c-sobres">0</div></div>
-          <div class="cost-row last"><div class="cost-label">Gasto total estimado</div><div class="cost-value orange-val" id="c-total">$0</div></div>
+          <div class="cost-title">📦 ¿Qué compraste?</div>
+          <div class="cost-row">
+            <div class="cost-label">Álbum tapa blanda</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input class="cost-input" type="number" id="precio-album-blanda" value="3990" onchange="calcCostos()" style="width:90px"/>
+              <input type="number" id="qty-album-blanda" value="0" min="0" onchange="calcCostos()" class="cost-input" style="width:60px"/>
+              <span style="font-size:12px;color:var(--text3)">unid.</span>
+            </div>
+          </div>
+          <div class="cost-row">
+            <div class="cost-label">Álbum tapa dura</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input class="cost-input" type="number" id="precio-album-dura" value="14900" onchange="calcCostos()" style="width:90px"/>
+              <input type="number" id="qty-album-dura" value="0" min="0" onchange="calcCostos()" class="cost-input" style="width:60px"/>
+              <span style="font-size:12px;color:var(--text3)">unid.</span>
+            </div>
+          </div>
+          <div class="cost-row">
+            <div class="cost-label">Sobres comprados</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input class="cost-input" type="number" id="precio-sobre" value="1100" onchange="calcCostos()" style="width:90px"/>
+              <input type="number" id="qty-sobres" value="0" min="0" onchange="calcCostos()" class="cost-input" style="width:60px"/>
+              <span style="font-size:12px;color:var(--text3)">sobres</span>
+            </div>
+          </div>
+          <div class="cost-row">
+            <div class="cost-label">Figuritas por sobre</div>
+            <input class="cost-input" type="number" id="figs-sobre" value="5" onchange="calcCostos()"/>
+          </div>
+          <div class="cost-row last">
+            <div class="cost-label" style="font-weight:700">💸 Total gastado</div>
+            <div class="cost-value orange-val" id="c-total">$0</div>
+          </div>
         </div>
+
         <div class="cost-card">
-          <div class="cost-title">📊 Para completar el álbum</div>
-          <div class="cost-row"><div class="cost-label">Figuritas faltantes</div><div class="cost-value" id="c-falt">960</div></div>
-          <div class="cost-row"><div class="cost-label">Sobres adicionales</div><div class="cost-value" id="c-sobres2">192</div></div>
-          <div class="cost-row last"><div class="cost-label">Costo estimado restante</div><div class="cost-value red-val" id="c-rest">$96.000</div></div>
+          <div class="cost-title">📊 Estado actual</div>
+          <div class="cost-row"><div class="cost-label">Figuritas obtenidas</div><div class="cost-value" id="c-obtenidas">0</div></div>
+          <div class="cost-row"><div class="cost-label">Figuritas faltantes</div><div class="cost-value" id="c-falt">1023</div></div>
+          <div class="cost-row"><div class="cost-label">Sobres adicionales necesarios</div><div class="cost-value" id="c-sobres2">205</div></div>
+          <div class="cost-row last"><div class="cost-label" style="font-weight:700">💰 Costo estimado restante</div><div class="cost-value red-val" id="c-rest">$0</div></div>
         </div>
       </div>
 
@@ -382,7 +407,7 @@ nav{padding:10px 10px;flex:1}
 const SUPABASE_URL='https://kfqczbuvkdrulwbwxhcy.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmcWN6YnV2a2RydWx3Ynd4aGN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NDE3MDEsImV4cCI6MjA5NDUxNzcwMX0.lQzl_bo7n5mmuCwEKSabsMJU-9Z1aW1ecDUH1Awki4g';
 
-const TOTAL=969;
+const TOTAL=1024;
 const TEAMS=[
   // GRUPO A
   {name:"México",flag:"🇲🇽",code:"MEX",n:20,group:"A"},
@@ -445,8 +470,12 @@ const TEAMS=[
   {name:"Croacia",flag:"🇭🇷",code:"CRO",n:20,group:"L"},
   {name:"RD Congo",flag:"🇨🇩",code:"COD",n:20,group:"L"},
 ];
-const ESPECIALES=[{name:"FWC",flag:"🌍",code:"FWC",n:19,stickers:Array.from({length:9},(_,i)=>"FWC-"+(i+1))},{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
-const CRACKS=[{name:"Los Cracks",flag:"⚽",code:"CRK",n:24,stickers:Array.from({length:24},(_,i)=>"CRK-"+(i+1))}];
+const ESPECIALES=[
+  {name:"FWC — Copa y Estadios",flag:"🌍",code:"FWC",n:20,stickers:Array.from({length:20},(_,i)=>"FWC-"+(i+1))},
+  {name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}
+];
+const CRACK_NAMES=["Lionel Messi","Kylian Mbappé","Erling Haaland","Vinicius Jr.","Rodri","Lamine Yamal","Pedri","Jude Bellingham","Phil Foden","Bukayo Saka","Raphinha","Federico Valverde","Antoine Griezmann","Rafael Leão","Jamal Musiala","Harry Kane","Cristiano Ronaldo","Mohamed Salah","Son Heung-min","Darwin Núñez","Alexis Mac Allister","Gavi","Ruben Dias","Erling Haaland Jr."];
+const CRACKS=[{name:"Los Cracks",flag:"⚽",code:"CRK",n:24,stickers:CRACK_NAMES.map((n,i)=>({code:"CRK-"+(i+1),name:n}))}];
 TEAMS.forEach(t=>{t.stickers=Array.from({length:t.n},(_,i)=>t.code+"-"+(i+1));});
 
 const {createClient}=supabase;
@@ -515,11 +544,12 @@ function toggleFig(code){
   updateAll();scheduleSave(code);
 }
 function getStats(){
-  const all=[...TEAMS.flatMap(t=>t.stickers),...ESPECIALES.flatMap(g=>g.stickers),...CRACKS.flatMap(g=>g.stickers)];
+  const all=[...TEAMS.flatMap(t=>t.stickers.map(getStickerCode)),...ESPECIALES.flatMap(g=>g.stickers.map(getStickerCode)),...CRACKS.flatMap(g=>g.stickers.map(getStickerCode))];
   const obtenidas=all.filter(s=>state[s]).length;
   return{obtenidas,faltantes:TOTAL-obtenidas};
 }
-function getGroupHave(t){return t.stickers.filter(s=>state[s]).length;}
+function getStickerCode(s){return typeof s==='object'?s.code:s;}
+function getGroupHave(t){return t.stickers.filter(s=>state[getStickerCode(s)]).length;}
 function updateAll(){
   const{obtenidas,faltantes}=getStats();
   const pct=Math.round(obtenidas/TOTAL*100);
@@ -566,12 +596,15 @@ function renderGroup(groups,gridId,searchId){
         <span class="badge ${complete?'have':'miss'}">${complete?'✓ Completo':have+'/'+t.n}</span>
       </div>
       <div class="cc-bar"><div class="cc-fill" style="width:${pct}%"></div></div>
-      ${isOpen?`<div class="stickers-wrap"><div class="stickers-label">Toca para marcar</div><div class="stickers-grid">${t.stickers.map(s=>`<div class="fig ${state[s]?'have':'need'}" id="fig-${s}" onclick="toggleFig('${s}')"><div class="fig-code">${s}</div><div class="fig-dot">${state[s]?'●':'○'}</div></div>`).join('')}</div></div>`:''}
+      ${isOpen?`<div class="stickers-wrap"><div class="stickers-label">Toca para marcar</div><div class="stickers-grid">${t.stickers.map(s=>{const code=getStickerCode(s);const nm=typeof s==='object'?s.name:null;return`<div class="fig ${state[code]?'have':'need'}" id="fig-${code}" onclick="toggleFig('${code}')" ${nm?`title="${nm}"`:''}><div class="fig-code">${nm?nm.split(' ').map(w=>w[0]).join('').slice(0,3):code}</div><div class="fig-dot">${state[code]?'●':'○'}</div></div>`;}).join('')}</div></div>`:''}
     </div>`;
   });
   grid.innerHTML=html;
 }
-function renderCountries(){renderGroup(TEAMS,'countries-grid','country-search');}
+function renderCountries(){
+  renderGroup(TEAMS,'countries-grid','country-search');
+  renderGroup(ESPECIALES,'esp-grid',null);
+}
 function renderEspeciales(){renderGroup(ESPECIALES,'esp-grid',null);}
 function renderCracks(){renderGroup(CRACKS,'cracks-grid',null);}
 function toggleCard(code,gridId,searchId){
@@ -584,14 +617,21 @@ function setCountryFilter(f,el){
   el.classList.add('active');renderCountries();
 }
 function calcCostos(){
-  const precio=parseFloat(document.getElementById('precio-sobre')?.value)||0;
+  const pAlbumB=parseFloat(document.getElementById('precio-album-blanda')?.value)||0;
+  const qAlbumB=parseFloat(document.getElementById('qty-album-blanda')?.value)||0;
+  const pAlbumD=parseFloat(document.getElementById('precio-album-dura')?.value)||0;
+  const qAlbumD=parseFloat(document.getElementById('qty-album-dura')?.value)||0;
+  const pSobre=parseFloat(document.getElementById('precio-sobre')?.value)||0;
+  const qSobres=parseFloat(document.getElementById('qty-sobres')?.value)||0;
   const fxs=parseFloat(document.getElementById('figs-sobre')?.value)||5;
   const{obtenidas,faltantes}=getStats();
-  const sobres=Math.ceil(obtenidas/fxs),sobres2=Math.ceil(faltantes/fxs);
-  setText('c-obtenidas',obtenidas);setText('c-sobres',sobres);
-  setText('c-total','$'+(sobres*precio).toLocaleString('es-CL'));
-  setText('c-falt',faltantes);setText('c-sobres2',sobres2);
-  setText('c-rest','$'+(sobres2*precio).toLocaleString('es-CL'));
+  const total=(pAlbumB*qAlbumB)+(pAlbumD*qAlbumD)+(pSobre*qSobres);
+  const sobres2=Math.ceil(faltantes/fxs);
+  setText('c-obtenidas',obtenidas);
+  setText('c-total','$'+total.toLocaleString('es-CL'));
+  setText('c-falt',faltantes);
+  setText('c-sobres2',sobres2);
+  setText('c-rest','$'+(sobres2*pSobre).toLocaleString('es-CL'));
 }
 function renderEstadisticas(){
   const{obtenidas,faltantes}=getStats();
@@ -612,7 +652,6 @@ function goPage(page,el){
   document.getElementById('page-'+page).classList.add('active');
   el.classList.add('active');closeSidebar();
   if(page==='paises')renderCountries();
-  if(page==='especiales')renderEspeciales();
   if(page==='cracks')renderCracks();
   if(page==='estadisticas')renderEstadisticas();
   if(page==='costos')calcCostos();
