@@ -1,34 +1,483 @@
-const CACHE = 'mundial2026-v1';
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/js/data.js',
-  '/js/app.js',
-  '/manifest.json',
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#1a3a2a"/>
+<title>FIFA 2026 — Álbum Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green-dark:#1a3a2a;--green-mid:#1e4d35;--green-accent:#2d7a4f;--green-bright:#4caf72;--gold:#c9a84c;--gold-light:#e8c97a;--bg:#f5f4f0;--surface:#fff;--text:#1a1a1a;--text-muted:#6b7280;--text-light:#9ca3af;--border:#e5e7eb;--red:#e53e3e;--amber:#d97706;--radius:12px;--sidebar-w:210px}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--green-dark);padding:20px}
+.login-card{background:#fff;border-radius:20px;padding:36px 32px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-size:48px;margin-bottom:12px}
+.login-title{font-size:24px;font-weight:700}
+.login-sub{font-size:14px;color:var(--text-muted);margin-bottom:28px}
+.login-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;margin-bottom:10px;outline:none;transition:border 0.15s}
+.login-input:focus{border-color:var(--green-accent)}
+.login-btn{width:100%;padding:12px;background:var(--green-dark);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px;font-family:'DM Sans',sans-serif}
+.login-btn:hover{background:var(--green-accent)}
+.login-btn-sec{width:100%;padding:10px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.login-error{background:#fef2f2;color:#dc2626;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;text-align:left}
+.layout{display:flex;min-height:100vh}
+.mobile-header{display:none;align-items:center;gap:12px;background:var(--green-dark);padding:12px 16px;position:sticky;top:0;z-index:100}
+.burger{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+.mobile-title{color:#fff;font-weight:700;font-size:16px;flex:1}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199}
+.sidebar-overlay.show{display:block}
+.sidebar{width:var(--sidebar-w);background:var(--green-dark);display:flex;flex-direction:column;min-height:100vh;flex-shrink:0;transition:transform 0.25s}
+.logo{padding:18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.logo-icon{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-title{font-size:13px;font-weight:700;color:#fff;line-height:1}
+.logo-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
+nav{padding:12px 8px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:rgba(255,255,255,0.6);cursor:pointer;font-size:13px;font-weight:500;margin-bottom:2px;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.9)}
+.nav-item.active{background:var(--green-accent);color:#fff}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.8}
+.sidebar-bottom{padding:12px 8px;border-top:1px solid rgba(255,255,255,0.08)}
+.user-row{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:4px}
+.user-ava{width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.user-email{font-size:10px;color:rgba(255,255,255,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.logout-btn{color:rgba(255,255,255,0.4)!important}
+.main{flex:1;overflow-y:auto;padding:28px;max-width:900px}
+.page{display:none}.page.active{display:block}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.page-sub{font-size:13px;color:var(--text-muted);margin-top:3px;margin-bottom:20px}
+.hero-card{background:linear-gradient(135deg,#2d7a4f 0%,#1a5c38 60%,#0f3d24 100%);border-radius:var(--radius);padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:6px}
+.hero-pct{font-size:48px;font-weight:700;color:#fff;line-height:1;font-family:'DM Mono',monospace}
+.hero-count{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px;margin-bottom:16px}
+.hero-bar{background:rgba(255,255,255,0.15);border-radius:999px;height:6px;overflow:hidden}
+.hero-fill{height:100%;background:var(--gold-light);border-radius:999px;transition:width 0.6s ease}
+.hero-trophy{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:40px;opacity:0.3}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.stat-icon{font-size:18px;margin-bottom:6px}
+.stat-num{font-size:28px;font-weight:700;font-family:'DM Mono',monospace;line-height:1}
+.stat-num.green{color:#16a34a}.stat-num.red{color:var(--red)}.stat-num.amber{color:var(--amber)}
+.stat-label{font-size:10px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-top:4px;font-weight:600}
+.cats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;align-items:center;gap:10px}
+.cat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cat-icon.escudos{background:#fef3c7}.cat-icon.equipos{background:#dbeafe}.cat-icon.especiales{background:#f3e8ff}.cat-icon.cracks{background:#dcfce7}
+.cat-name{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);font-weight:600}
+.cat-val{font-size:14px;font-weight:700;font-family:'DM Mono',monospace}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.chart-title{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.rank-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.rank-flag{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.rank-name{font-size:12px;font-weight:500;min-width:70px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-bar-wrap{flex:1;background:var(--bg);border-radius:999px;height:4px;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:999px}
+.rank-bar-fill.top{background:var(--gold)}.rank-bar-fill.bot{background:#fca5a5}
+.rank-pct{font-size:11px;font-weight:600;min-width:30px;text-align:right;font-family:'DM Mono',monospace}
+.rank-pct.top{color:var(--amber)}.rank-pct.bot{color:var(--red)}
+.sync-status{font-size:12px;color:var(--text-muted);text-align:center;padding:8px}
+.countries-header{margin-bottom:14px}
+.search-box{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px;background:var(--surface)}
+.search-box:focus{border-color:var(--green-accent)}
+.filter-tabs{display:flex;gap:6px}
+.filter-btn{padding:6px 14px;border-radius:999px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:500}
+.filter-btn.active{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+.countries-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.country-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:border-color 0.15s}
+.country-card:hover{border-color:var(--green-accent)}
+.country-card.expanded{border-color:var(--green-accent)}
+.cc-header{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.cc-flag{font-size:22px}
+.cc-name{font-size:14px;font-weight:600;flex:1}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.badge.miss{background:#fef2f2;color:#dc2626}.badge.have{background:#f0fdf4;color:#16a34a}
+.cc-bar{margin:8px 0 0;background:var(--bg);border-radius:999px;height:4px;overflow:hidden}
+.cc-fill{height:100%;background:var(--green-bright);border-radius:999px;transition:width 0.4s}
+.stickers-wrap{padding-top:10px;border-top:1px solid var(--border);margin-top:10px}
+.stickers-label{font-size:11px;color:var(--text-muted);margin-bottom:6px}
+.stickers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:5px}
+.fig{border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;cursor:pointer;transition:all 0.12s;user-select:none}
+.fig:active{transform:scale(0.95)}
+.fig.have{background:#f0fdf4;border-color:#86efac}
+.fig.need{background:var(--bg)}
+.fig-code{font-size:10px;font-weight:600;color:var(--text)}
+.fig.have .fig-code{color:#15803d}
+.fig-dot{font-size:11px;margin-top:1px;color:var(--text-light)}
+.fig.have .fig-dot{color:#4ade80}
+.cost-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.cost-title{font-size:15px;font-weight:700;margin-bottom:14px}
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.cost-row.last{border-bottom:none;font-weight:700}
+.cost-label{font-size:13px;color:var(--text-muted)}
+.cost-value{font-size:14px;font-weight:600;font-family:'DM Mono',monospace}
+.cost-input{width:90px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Mono',monospace;text-align:right;outline:none}
+.green-val{color:var(--green-accent);font-size:18px!important}
+.red-val{color:var(--red);font-size:18px!important}
+.est-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.est-title{font-size:13px;font-weight:700;margin-bottom:12px}
+.pl-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pl-flag{font-size:15px;width:20px;text-align:center}
+.pl-name{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-bar-w{flex:2;background:var(--bg);border-radius:999px;height:4px;overflow:hidden}
+.pl-fill{height:100%;background:var(--green-bright);border-radius:999px}
+.pl-num{font-size:11px;font-family:'DM Mono',monospace;min-width:30px;text-align:right;color:var(--text-muted)}
+@media(max-width:768px){
+  .mobile-header{display:flex}
+  .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:200;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .layout{flex-direction:column}
+  .main{padding:16px}
+  .cats-row{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr}
+  .countries-grid{grid-template-columns:1fr}
+  .hero-pct{font-size:36px}
+}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🏆</div>
+    <h1 class="login-title">FIFA 2026</h1>
+    <p class="login-sub">Álbum Tracker</p>
+    <div id="login-error" class="login-error" style="display:none"></div>
+    <div id="login-form">
+      <input type="email" id="login-email" placeholder="Tu email" class="login-input"/>
+      <input type="password" id="login-pass" placeholder="Contraseña" class="login-input"/>
+      <button class="login-btn" onclick="loginUser()">Entrar</button>
+      <button class="login-btn-sec" onclick="showRegister()">Crear cuenta nueva</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <input type="text" id="reg-name" placeholder="Tu nombre" class="login-input"/>
+      <input type="email" id="reg-email" placeholder="Tu email" class="login-input"/>
+      <input type="password" id="reg-pass" placeholder="Contraseña (mín. 6 caracteres)" class="login-input"/>
+      <button class="login-btn" onclick="registerUser()">Crear cuenta</button>
+      <button class="login-btn-sec" onclick="showLogin()">Ya tengo cuenta</button>
+    </div>
+    <div id="login-loading" style="display:none;text-align:center;color:#6b7280;padding:16px">Cargando...</div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="mobile-header">
+    <button class="burger" onclick="toggleSidebar()">☰</button>
+    <span class="mobile-title">FIFA 2026</span>
+    <div class="user-avatar" id="m-avatar">?</div>
+  </div>
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+  <div class="layout">
+    <div class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🏆</div>
+        <div class="logo-text">
+          <div class="logo-title">FIFA 2026</div>
+          <div class="logo-sub">Álbum Tracker</div>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-item active" onclick="goPage('inicio',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio</div>
+        <div class="nav-item" onclick="goPage('paises',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>Países</div>
+        <div class="nav-item" onclick="goPage('especiales',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>Especiales</div>
+        <div class="nav-item" onclick="goPage('cracks',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cracks</div>
+        <div class="nav-item" onclick="goPage('costos',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Costos</div>
+        <div class="nav-item" onclick="goPage('estadisticas',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Estadísticas</div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-row">
+          <div class="user-ava" id="s-avatar">?</div>
+          <div><div class="user-name" id="s-name">Usuario</div><div class="user-email" id="s-email"></div></div>
+        </div>
+        <div class="nav-item logout-btn" onclick="logoutUser()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="page active" id="page-inicio">
+        <div class="page-title">Mundial 2026</div>
+        <div class="page-sub">Resumen de tu colección</div>
+        <div class="hero-card">
+          <div class="hero-label">Progreso Total</div>
+          <div class="hero-pct" id="hero-pct">0%</div>
+          <div class="hero-count" id="hero-count">0 de 980 figuritas</div>
+          <div class="hero-bar"><div class="hero-fill" id="hero-fill" style="width:0%"></div></div>
+          <div class="hero-trophy">🏆</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num green" id="s-obtenidas">0</div><div class="stat-label">Obtenidas</div></div>
+          <div class="stat-card"><div class="stat-icon">❌</div><div class="stat-num red" id="s-faltantes">980</div><div class="stat-label">Faltantes</div></div>
+          <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-num amber" id="s-repetidas">0</div><div class="stat-label">Repetidas</div></div>
+        </div>
+        <div class="cats-row">
+          <div class="cat-card"><div class="cat-icon escudos">🛡️</div><div><div class="cat-name">Escudos</div><div class="cat-val" id="cat-escudos">0/48</div></div></div>
+          <div class="cat-card"><div class="cat-icon equipos">👥</div><div><div class="cat-name">Equipos</div><div class="cat-val" id="cat-equipos">0/48</div></div></div>
+          <div class="cat-card"><div class="cat-icon especiales">⭐</div><div><div class="cat-name">Especiales</div><div class="cat-val" id="cat-esp">0/20</div></div></div>
+          <div class="cat-card"><div class="cat-icon cracks">🌟</div><div><div class="cat-name">Cracks</div><div class="cat-val" id="cat-cracks">0/24</div></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card"><div class="chart-title"><span>📈</span> Top 5 más completos</div><div id="top5"></div></div>
+          <div class="chart-card"><div class="chart-title"><span>📉</span> 5 más atrasadas</div><div id="bot5"></div></div>
+        </div>
+        <div id="sync-status" class="sync-status"></div>
+      </div>
+      <div class="page" id="page-paises">
+        <div class="page-title">Países</div>
+        <div class="page-sub">Toca una figurita para marcarla</div>
+        <div class="countries-header">
+          <input class="search-box" type="text" placeholder="🔍 Buscar país..." id="country-search" oninput="renderCountries()"/>
+          <div class="filter-tabs">
+            <button class="filter-btn active" onclick="setCountryFilter('all',this)">Todos</button>
+            <button class="filter-btn" onclick="setCountryFilter('incomplete',this)">Incompletos</button>
+            <button class="filter-btn" onclick="setCountryFilter('done',this)">Completos</button>
+          </div>
+        </div>
+        <div class="countries-grid" id="countries-grid"></div>
+      </div>
+      <div class="page" id="page-especiales">
+        <div class="page-title">Especiales</div>
+        <div class="page-sub">Figuritas especiales del álbum</div>
+        <div class="countries-grid" id="esp-grid"></div>
+      </div>
+      <div class="page" id="page-cracks">
+        <div class="page-title">Cracks</div>
+        <div class="page-sub">Los mejores jugadores del Mundial</div>
+        <div class="countries-grid" id="cracks-grid"></div>
+      </div>
+      <div class="page" id="page-costos">
+        <div class="page-title">Costos</div>
+        <div class="page-sub">Calcula cuánto has gastado</div>
+        <div class="cost-card">
+          <div class="cost-title">💰 Calculadora de gasto</div>
+          <div class="cost-row"><div class="cost-label">Precio por sobre</div><input class="cost-input" type="number" id="precio-sobre" value="500" onchange="calcCostos()"/></div>
+          <div class="cost-row"><div class="cost-label">Figuritas por sobre</div><input class="cost-input" type="number" id="figs-sobre" value="5" onchange="calcCostos()"/></div>
+          <div class="cost-row"><div class="cost-label">Figuritas obtenidas</div><div class="cost-value" id="c-obtenidas">0</div></div>
+          <div class="cost-row"><div class="cost-label">Sobres abiertos (est.)</div><div class="cost-value" id="c-sobres">0</div></div>
+          <div class="cost-row last"><div class="cost-label">Gasto total estimado</div><div class="cost-value green-val" id="c-total">$0</div></div>
+        </div>
+        <div class="cost-card">
+          <div class="cost-title">📊 Para completar el álbum</div>
+          <div class="cost-row"><div class="cost-label">Figuritas faltantes</div><div class="cost-value" id="c-falt">980</div></div>
+          <div class="cost-row"><div class="cost-label">Sobres adicionales</div><div class="cost-value" id="c-sobres2">196</div></div>
+          <div class="cost-row last"><div class="cost-label">Costo estimado restante</div><div class="cost-value red-val" id="c-rest">$98.000</div></div>
+        </div>
+      </div>
+      <div class="page" id="page-estadisticas">
+        <div class="page-title">Estadísticas</div>
+        <div class="page-sub">Análisis de tu colección</div>
+        <div id="est-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ══════════════════════════════════════════
+// PON AQUÍ TUS DATOS DE SUPABASE
+const SUPABASE_URL = 'https://kfqczbuvkdrulwbwxhcy.supabase.co';
+const SUPABASE_ANON_KEY = 'PEGA_AQUI_TU_ANON_KEY';
+// ══════════════════════════════════════════
+
+const TOTAL = 980;
+const TEAMS = [
+  {name:"Argentina",flag:"🇦🇷",code:"ARG",n:18},{name:"Brasil",flag:"🇧🇷",code:"BRA",n:18},
+  {name:"Francia",flag:"🇫🇷",code:"FRA",n:18},{name:"España",flag:"🇪🇸",code:"ESP",n:18},
+  {name:"Alemania",flag:"🇩🇪",code:"GER",n:18},{name:"Portugal",flag:"🇵🇹",code:"POR",n:18},
+  {name:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",code:"ENG",n:18},{name:"México",flag:"🇲🇽",code:"MEX",n:18},
+  {name:"Uruguay",flag:"🇺🇾",code:"URU",n:18},{name:"Colombia",flag:"🇨🇴",code:"COL",n:18},
+  {name:"Chile",flag:"🇨🇱",code:"CHI",n:18},{name:"Ecuador",flag:"🇪🇨",code:"ECU",n:18},
+  {name:"Perú",flag:"🇵🇪",code:"PER",n:18},{name:"Bolivia",flag:"🇧🇴",code:"BOL",n:18},
+  {name:"Paraguay",flag:"🇵🇾",code:"PAR",n:18},{name:"Venezuela",flag:"🇻🇪",code:"VEN",n:18},
+  {name:"EE.UU.",flag:"🇺🇸",code:"USA",n:18},{name:"Canadá",flag:"🇨🇦",code:"CAN",n:18},
+  {name:"Japón",flag:"🇯🇵",code:"JPN",n:18},{name:"Marruecos",flag:"🇲🇦",code:"MAR",n:18},
+  {name:"Senegal",flag:"🇸🇳",code:"SEN",n:18},{name:"Nigeria",flag:"🇳🇬",code:"NGA",n:18},
+  {name:"Corea del Sur",flag:"🇰🇷",code:"KOR",n:18},{name:"Australia",flag:"🇦🇺",code:"AUS",n:18},
+  {name:"Croacia",flag:"🇭🇷",code:"CRO",n:18},{name:"Países Bajos",flag:"🇳🇱",code:"NED",n:18},
+  {name:"Bélgica",flag:"🇧🇪",code:"BEL",n:18},{name:"Suiza",flag:"🇨🇭",code:"SUI",n:18},
+  {name:"Panamá",flag:"🇵🇦",code:"PAN",n:18},{name:"Ghana",flag:"🇬🇭",code:"GHA",n:18},
+  {name:"Chequia",flag:"🇨🇿",code:"CZE",n:18},{name:"Polonia",flag:"🇵🇱",code:"POL",n:18},
+  {name:"Arabia Saudita",flag:"🇸🇦",code:"KSA",n:18},{name:"Irán",flag:"🇮🇷",code:"IRN",n:18},
+  {name:"Nueva Zelanda",flag:"🇳🇿",code:"NZL",n:18},{name:"Costa Rica",flag:"🇨🇷",code:"CRC",n:18},
+  {name:"Honduras",flag:"🇭🇳",code:"HON",n:18},{name:"Jamaica",flag:"🇯🇲",code:"JAM",n:18},
+  {name:"El Salvador",flag:"🇸🇻",code:"SLV",n:18},{name:"Túnez",flag:"🇹🇳",code:"TUN",n:18},
+  {name:"Camerún",flag:"🇨🇲",code:"CMR",n:18},{name:"Argelia",flag:"🇩🇿",code:"ALG",n:18},
+  {name:"Costa de Marfil",flag:"🇨🇮",code:"CIV",n:18},{name:"Sudáfrica",flag:"🇿🇦",code:"RSA",n:18},
+  {name:"Egipto",flag:"🇪🇬",code:"EGY",n:18},{name:"Turquía",flag:"🇹🇷",code:"TUR",n:18},
+  {name:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",code:"SCO",n:18},{name:"Dinamarca",flag:"🇩🇰",code:"DEN",n:18},
 ];
+const ESPECIALES=[{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
+const CRACKS=[{name:"Los Cracks",flag:"⚽",code:"CRK",n:24,stickers:Array.from({length:24},(_,i)=>"CRK-"+(i+1))}];
+TEAMS.forEach(t=>{t.stickers=Array.from({length:t.n},(_,i)=>t.code+"-"+(i+1));});
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
-});
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let currentUser=null,state={},openCards={},countryFilter='all',saveTimeout=null;
 
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-  ));
-  self.clients.claim();
+async function loginUser(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  showLoading(true);
+  const{error}=await sb.auth.signInWithPassword({email,password:pass});
+  showLoading(false);
+  if(error)showError(error.message);
+}
+async function registerUser(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!name){showError('Escribe tu nombre');return;}
+  showLoading(true);
+  const{error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+  showLoading(false);
+  if(error){showError(error.message);return;}
+  showError('✅ Revisa tu email para confirmar tu cuenta, luego ingresa.');
+}
+async function logoutUser(){
+  await sb.auth.signOut();
+  currentUser=null;state={};
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+}
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if(session?.user){
+    currentUser=session.user;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    setupUserUI();await loadState();updateAll();renderCountries();
+  }
 });
-
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
-});
+function setupUserUI(){
+  const name=currentUser.user_metadata?.full_name||currentUser.email.split('@')[0];
+  const initials=name.slice(0,2).toUpperCase();
+  ['s-avatar','m-avatar'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=initials;});
+  setText('s-name',name);setText('s-email',currentUser.email);
+}
+async function loadState(){
+  setSyncStatus('Cargando figuritas...');
+  const{data,error}=await sb.from('stickers').select('sticker_code,have').eq('user_id',currentUser.id);
+  if(error){setSyncStatus('Error al cargar');return;}
+  state={};
+  (data||[]).forEach(r=>{if(r.have)state[r.sticker_code]=true;});
+  setSyncStatus('✅ Sincronizado');
+}
+function scheduleSave(code){clearTimeout(saveTimeout);saveTimeout=setTimeout(()=>saveSticker(code),600);}
+async function saveSticker(code){
+  if(!currentUser)return;
+  const have=!!state[code];
+  const{error}=await sb.from('stickers').upsert({user_id:currentUser.id,sticker_code:code,have},{onConflict:'user_id,sticker_code'});
+  if(error)setSyncStatus('❌ Error al guardar');
+  else setSyncStatus('✅ Guardado');
+}
+function setSyncStatus(msg){const el=document.getElementById('sync-status');if(el)el.textContent=msg;}
+function toggleFig(code){
+  state[code]=!state[code];
+  const el=document.getElementById('fig-'+code);
+  if(el){el.className='fig '+(state[code]?'have':'need');el.querySelector('.fig-dot').textContent=state[code]?'✓':'○';}
+  updateAll();scheduleSave(code);
+}
+function getStats(){
+  const all=[...TEAMS.flatMap(t=>t.stickers),...ESPECIALES.flatMap(g=>g.stickers),...CRACKS.flatMap(g=>g.stickers)];
+  const obtenidas=all.filter(s=>state[s]).length;
+  return{obtenidas,faltantes:TOTAL-obtenidas};
+}
+function getGroupHave(t){return t.stickers.filter(s=>state[s]).length;}
+function updateAll(){
+  const{obtenidas,faltantes}=getStats();
+  const pct=Math.round(obtenidas/TOTAL*100);
+  setText('hero-pct',pct+'%');setText('hero-count',obtenidas+' de '+TOTAL+' figuritas');
+  setStyle('hero-fill','width',pct+'%');
+  setText('s-obtenidas',obtenidas);setText('s-faltantes',faltantes);
+  const espH=ESPECIALES.reduce((a,g)=>a+getGroupHave(g),0);
+  const crkH=CRACKS.reduce((a,g)=>a+getGroupHave(g),0);
+  const teamH=TEAMS.reduce((a,t)=>a+getGroupHave(t),0);
+  setText('cat-escudos',Math.min(teamH,48)+'/48');setText('cat-equipos',Math.min(teamH,48)+'/48');
+  setText('cat-esp',espH+'/20');setText('cat-cracks',crkH+'/24');
+  updateCharts();calcCostos();
+}
+function updateCharts(){
+  const ranked=[...TEAMS].map(t=>({...t,have:getGroupHave(t),pct:Math.round(getGroupHave(t)/t.n*100)})).sort((a,b)=>b.pct-a.pct);
+  const rr=type=>t=>`<div class="rank-row"><span class="rank-flag">${t.flag}</span><span class="rank-name">${t.name}</span><div class="rank-bar-wrap"><div class="rank-bar-fill ${type}" style="width:${t.pct}%"></div></div><span class="rank-pct ${type}">${t.pct}%</span></div>`;
+  setHTML('top5',ranked.slice(0,5).map(rr('top')).join(''));
+  setHTML('bot5',[...ranked].sort((a,b)=>a.pct-b.pct).slice(0,5).map(rr('bot')).join(''));
+}
+function renderGroup(groups,gridId,searchId){
+  const q=searchId?(document.getElementById(searchId)||{value:''}).value.toLowerCase():'';
+  let list=[...groups];
+  if(q)list=list.filter(t=>t.name.toLowerCase().includes(q));
+  if(countryFilter==='incomplete')list=list.filter(t=>getGroupHave(t)<t.n);
+  if(countryFilter==='done')list=list.filter(t=>getGroupHave(t)===t.n);
+  const grid=document.getElementById(gridId);if(!grid)return;
+  if(!list.length){grid.innerHTML='<div style="color:var(--text-muted);padding:20px;font-size:13px">Sin resultados</div>';return;}
+  grid.innerHTML=list.map(t=>{
+    const have=getGroupHave(t),pct=Math.round(have/t.n*100),isOpen=!!openCards[t.code],complete=have===t.n;
+    return`<div class="country-card${isOpen?' expanded':''}" id="cc-${t.code}">
+      <div class="cc-header" onclick="toggleCard('${t.code}','${gridId}','${searchId||''}')">
+        <span class="cc-flag">${t.flag}</span><span class="cc-name">${t.name}</span>
+        <span class="badge ${complete?'have':'miss'}">${complete?'✓ Completo':have+'/'+t.n+' — faltan '+(t.n-have)}</span>
+      </div>
+      <div class="cc-bar"><div class="cc-fill" style="width:${pct}%"></div></div>
+      ${isOpen?`<div class="stickers-wrap"><div class="stickers-label">Toca para marcar</div><div class="stickers-grid">${t.stickers.map(s=>`<div class="fig ${state[s]?'have':'need'}" id="fig-${s}" onclick="toggleFig('${s}')"><div class="fig-code">${s}</div><div class="fig-dot">${state[s]?'✓':'○'}</div></div>`).join('')}</div></div>`:''}
+    </div>`;
+  }).join('');
+}
+function renderCountries(){renderGroup(TEAMS,'countries-grid','country-search');}
+function renderEspeciales(){renderGroup(ESPECIALES,'esp-grid',null);}
+function renderCracks(){renderGroup(CRACKS,'cracks-grid',null);}
+function toggleCard(code,gridId,searchId){
+  openCards[code]=!openCards[code];
+  renderGroup(gridId==='countries-grid'?TEAMS:gridId==='esp-grid'?ESPECIALES:CRACKS,gridId,searchId||null);
+}
+function setCountryFilter(f,el){
+  countryFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');renderCountries();
+}
+function calcCostos(){
+  const precio=parseFloat(document.getElementById('precio-sobre')?.value)||0;
+  const fxs=parseFloat(document.getElementById('figs-sobre')?.value)||5;
+  const{obtenidas,faltantes}=getStats();
+  const sobres=Math.ceil(obtenidas/fxs),sobres2=Math.ceil(faltantes/fxs);
+  setText('c-obtenidas',obtenidas);setText('c-sobres',sobres);
+  setText('c-total','$'+(sobres*precio).toLocaleString('es-CL'));
+  setText('c-falt',faltantes);setText('c-sobres2',sobres2);
+  setText('c-rest','$'+(sobres2*precio).toLocaleString('es-CL'));
+}
+function renderEstadisticas(){
+  const{obtenidas,faltantes}=getStats();
+  const ranked=[...TEAMS].map(t=>({...t,have:getGroupHave(t),pct:Math.round(getGroupHave(t)/t.n*100)})).sort((a,b)=>b.pct-a.pct);
+  setHTML('est-content',`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="est-card"><div class="est-title">🏅 Ranking por completar</div>
+        ${ranked.slice(0,10).map(t=>`<div class="pl-row"><span class="pl-flag">${t.flag}</span><span class="pl-name">${t.name}</span><div class="pl-bar-w"><div class="pl-fill" style="width:${t.pct}%"></div></div><span class="pl-num">${t.pct}%</span></div>`).join('')}
+      </div>
+      <div class="est-card"><div class="est-title">📊 Resumen general</div>
+        ${[['Total figuritas',TOTAL],['Obtenidas',obtenidas],['Faltantes',faltantes],['Equipos con al menos 1',ranked.filter(t=>t.have>0).length],['Equipos completos',ranked.filter(t=>t.have===t.n).length]].map(([l,v])=>`<div class="cost-row"><div class="cost-label">${l}</div><div class="cost-value">${v}</div></div>`).join('')}
+      </div>
+    </div>`);
+}
+function goPage(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  el.classList.add('active');closeSidebar();
+  if(page==='paises')renderCountries();
+  if(page==='especiales')renderEspeciales();
+  if(page==='cracks')renderCracks();
+  if(page==='estadisticas')renderEstadisticas();
+  if(page==='costos')calcCostos();
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+function showRegister(){document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block';clearError();}
+function showLogin(){document.getElementById('register-form').style.display='none';document.getElementById('login-form').style.display='block';clearError();}
+function showError(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
+function clearError(){document.getElementById('login-error').style.display='none';}
+function showLoading(v){document.getElementById('login-loading').style.display=v?'block':'none';}
+function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=val;}
+function setHTML(id,val){const e=document.getElementById(id);if(e)e.innerHTML=val;}
+function setStyle(id,prop,val){const e=document.getElementById(id);if(e)e.style[prop]=val;}
+</script>
+</body>
+</html>
