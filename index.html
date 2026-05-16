@@ -119,6 +119,17 @@ nav{padding:10px 10px;flex:1}
 .rank-pct{font-size:11px;font-weight:600;min-width:32px;text-align:right;font-family:'JetBrains Mono',monospace}
 .rank-pct.top{color:var(--orange2)}.rank-pct.bot{color:var(--red)}
 .sync-status{font-size:12px;color:var(--text3);text-align:center;padding:8px}
+.celebration{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
+.celebration.show{display:flex}
+.celeb-card{background:var(--bg2);border:2px solid rgba(249,115,22,0.5);border-radius:24px;padding:40px 36px;max-width:420px;width:100%}
+.celeb-emoji{font-size:64px;margin-bottom:16px;display:block;animation:bounce 1s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.celeb-title{font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-0.5px}
+.celeb-sub{font-size:14px;color:var(--text2);margin-bottom:6px}
+.celeb-name{font-size:18px;font-weight:700;color:var(--orange);margin-bottom:24px}
+.celeb-btn{background:var(--orange);color:#fff;border:none;padding:12px 28px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.watermark{position:fixed;bottom:10px;right:14px;font-size:11px;color:var(--text3);z-index:50;letter-spacing:0.5px;pointer-events:none}
+.watermark span{color:var(--orange2);font-weight:700}
 
 /* COUNTRIES */
 .countries-header{margin-bottom:16px}
@@ -199,6 +210,7 @@ nav{padding:10px 10px;flex:1}
     <span class="login-logo">⚽</span>
     <h1 class="login-title">FIFA 2026</h1>
     <div class="login-badge">Álbum Tracker</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:20px;letter-spacing:0.5px">Creado por <span style="color:var(--orange2);font-weight:700">TheVishuxx</span></div>
     <div id="login-error" class="login-error" style="display:none"></div>
     <div id="login-form">
       <input type="email" id="login-email" placeholder="Tu email" class="login-input"/>
@@ -230,7 +242,7 @@ nav{padding:10px 10px;flex:1}
         <div class="logo-icon">⚽</div>
         <div>
           <div class="logo-title">FIFA 2026</div>
-          <div class="logo-sub">ÁLBUM TRACKER</div>
+          <div class="logo-sub">BY THEVISHUXX</div>
         </div>
       </div>
       <nav>
@@ -402,12 +414,27 @@ nav{padding:10px 10px;flex:1}
   </div>
 </div>
 
+<!-- CELEBRACIÓN -->
+<div class="celebration" id="celebration">
+  <div class="celeb-card">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">¡Álbum Completo!</div>
+    <div class="celeb-sub">¡Felicidades! Llenaste el álbum del</div>
+    <div class="celeb-name">FIFA World Cup 2026</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:20px">Logrado por <span style="color:var(--orange2);font-weight:700">TheVishuxx</span> 🎉</div>
+    <button class="celeb-btn" onclick="document.getElementById('celebration').classList.remove('show')">¡Genial! →</button>
+  </div>
+</div>
+
+<!-- MARCA DE AGUA -->
+<div class="watermark">Hecho por <span>TheVishuxx</span></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://kfqczbuvkdrulwbwxhcy.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmcWN6YnV2a2RydWx3Ynd4aGN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NDE3MDEsImV4cCI6MjA5NDUxNzcwMX0.lQzl_bo7n5mmuCwEKSabsMJU-9Z1aW1ecDUH1Awki4g';
 
-const TOTAL=1024;
+const TOTAL=980;
 const TEAMS=[
   // GRUPO A
   {name:"México",flag:"🇲🇽",code:"MEX",n:20,group:"A"},
@@ -543,7 +570,7 @@ function toggleFig(code){
   updateAll();scheduleSave(code);
 }
 function getStats(){
-  const all=[...TEAMS.flatMap(t=>t.stickers.map(getStickerCode)),...ESPECIALES.flatMap(g=>g.stickers.map(getStickerCode)),...CRACKS.flatMap(g=>g.stickers.map(getStickerCode))];
+  const all=[...TEAMS.flatMap(t=>t.stickers.map(getStickerCode)),...ESPECIALES.flatMap(g=>g.stickers.map(getStickerCode))];
   const obtenidas=all.filter(s=>state[s]).length;
   return{obtenidas,faltantes:TOTAL-obtenidas};
 }
@@ -565,6 +592,7 @@ function updateAll(){
   setText('cat-equipos',Math.min(teamH,48)+'/48');
   setText('cat-esp',espH+'/20');setText('cat-cracks',crkH+'/24');
   updateCharts();calcCostos();
+  if(obtenidas===TOTAL){document.getElementById('celebration').classList.add('show');}
 }
 function updateCharts(){
   const ranked=[...TEAMS].map(t=>({...t,have:getGroupHave(t),pct:Math.round(getGroupHave(t)/t.n*100)})).sort((a,b)=>b.pct-a.pct);
