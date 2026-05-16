@@ -1,8 +1,8 @@
 // ============================================================
 // CONFIGURACIÓN — reemplaza estos valores con los tuyos de Supabase
 // ============================================================
-const SUPABASE_URL = 'https://TU_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'TU_ANON_KEY';
+const SUPABASE_URL = 'https://kfqczbuvkdrulwbwxhcy.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmcWN6YnV2a2RydWx3Ynd4aGN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NDE3MDEsImV4cCI6MjA5NDUxNzcwMX0.lQzl_bo7n5mmuCwEKSabsMJU-9Z1aW1ecDUH1Awki4g';
 // ============================================================
 
 const { createClient } = supabase;
