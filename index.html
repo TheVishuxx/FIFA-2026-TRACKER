@@ -278,7 +278,7 @@ nav{padding:10px 10px;flex:1}
         <div class="hero-card">
           <div class="hero-label">Progreso total</div>
           <div class="hero-pct"><span id="hero-pct">0</span>%</div>
-          <div class="hero-count" id="hero-count">0 de 960 figuritas</div>
+          <div class="hero-count" id="hero-count">0 de 969 figuritas</div>
           <div class="hero-bar"><div class="hero-fill" id="hero-fill"></div></div>
           <div class="hero-trophy">🏆</div>
         </div>
@@ -382,58 +382,70 @@ nav{padding:10px 10px;flex:1}
 const SUPABASE_URL='https://kfqczbuvkdrulwbwxhcy.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmcWN6YnV2a2RydWx3Ynd4aGN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NDE3MDEsImV4cCI6MjA5NDUxNzcwMX0.lQzl_bo7n5mmuCwEKSabsMJU-9Z1aW1ecDUH1Awki4g';
 
-const TOTAL=960;
+const TOTAL=969;
 const TEAMS=[
-  {name:"México",flag:"🇲🇽",code:"MEX",n:20},
-  {name:"EE.UU.",flag:"🇺🇸",code:"USA",n:20},
-  {name:"Canadá",flag:"🇨🇦",code:"CAN",n:20},
-  {name:"Argentina",flag:"🇦🇷",code:"ARG",n:20},
-  {name:"Brasil",flag:"🇧🇷",code:"BRA",n:20},
-  {name:"Ecuador",flag:"🇪🇨",code:"ECU",n:20},
-  {name:"Uruguay",flag:"🇺🇾",code:"URU",n:20},
-  {name:"Paraguay",flag:"🇵🇾",code:"PAR",n:20},
-  {name:"Colombia",flag:"🇨🇴",code:"COL",n:20},
-  {name:"España",flag:"🇪🇸",code:"ESP",n:20},
-  {name:"Francia",flag:"🇫🇷",code:"FRA",n:20},
-  {name:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",code:"ENG",n:20},
-  {name:"Alemania",flag:"🇩🇪",code:"GER",n:20},
-  {name:"Portugal",flag:"🇵🇹",code:"POR",n:20},
-  {name:"Países Bajos",flag:"🇳🇱",code:"NED",n:20},
-  {name:"Bélgica",flag:"🇧🇪",code:"BEL",n:20},
-  {name:"Austria",flag:"🇦🇹",code:"AUT",n:20},
-  {name:"Suiza",flag:"🇨🇭",code:"SUI",n:20},
-  {name:"Noruega",flag:"🇳🇴",code:"NOR",n:20},
-  {name:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",code:"SCO",n:20},
-  {name:"Turquía",flag:"🇹🇷",code:"TUR",n:20},
-  {name:"Bosnia",flag:"🇧🇦",code:"BIH",n:20},
-  {name:"Suecia",flag:"🇸🇪",code:"SWE",n:20},
-  {name:"Chequia",flag:"🇨🇿",code:"CZE",n:20},
-  {name:"Croacia",flag:"🇭🇷",code:"CRO",n:20},
-  {name:"Japón",flag:"🇯🇵",code:"JPN",n:20},
-  {name:"Irán",flag:"🇮🇷",code:"IRN",n:20},
-  {name:"Corea del Sur",flag:"🇰🇷",code:"KOR",n:20},
-  {name:"Australia",flag:"🇦🇺",code:"AUS",n:20},
-  {name:"Arabia Saudita",flag:"🇸🇦",code:"KSA",n:20},
-  {name:"Qatar",flag:"🇶🇦",code:"QAT",n:20},
-  {name:"Uzbekistán",flag:"🇺🇿",code:"UZB",n:20},
-  {name:"Jordania",flag:"🇯🇴",code:"JOR",n:20},
-  {name:"Irak",flag:"🇮🇶",code:"IRQ",n:20},
-  {name:"Marruecos",flag:"🇲🇦",code:"MAR",n:20},
-  {name:"Túnez",flag:"🇹🇳",code:"TUN",n:20},
-  {name:"Egipto",flag:"🇪🇬",code:"EGY",n:20},
-  {name:"Argelia",flag:"🇩🇿",code:"ALG",n:20},
-  {name:"Ghana",flag:"🇬🇭",code:"GHA",n:20},
-  {name:"Cabo Verde",flag:"🇨🇻",code:"CPV",n:20},
-  {name:"Sudáfrica",flag:"🇿🇦",code:"RSA",n:20},
-  {name:"Costa de Marfil",flag:"🇨🇮",code:"CIV",n:20},
-  {name:"Senegal",flag:"🇸🇳",code:"SEN",n:20},
-  {name:"RD Congo",flag:"🇨🇩",code:"COD",n:20},
-  {name:"Panamá",flag:"🇵🇦",code:"PAN",n:20},
-  {name:"Haití",flag:"🇭🇹",code:"HAI",n:20},
-  {name:"Curazao",flag:"🇨🇼",code:"CUW",n:20},
-  {name:"Nueva Zelanda",flag:"🇳🇿",code:"NZL",n:20},
+  // GRUPO A
+  {name:"México",flag:"🇲🇽",code:"MEX",n:20,group:"A"},
+  {name:"Sudáfrica",flag:"🇿🇦",code:"RSA",n:20,group:"A"},
+  {name:"Corea del Sur",flag:"🇰🇷",code:"KOR",n:20,group:"A"},
+  {name:"Chequia",flag:"🇨🇿",code:"CZE",n:20,group:"A"},
+  // GRUPO B
+  {name:"Canadá",flag:"🇨🇦",code:"CAN",n:20,group:"B"},
+  {name:"Suiza",flag:"🇨🇭",code:"SUI",n:20,group:"B"},
+  {name:"Qatar",flag:"🇶🇦",code:"QAT",n:20,group:"B"},
+  {name:"Bosnia",flag:"🇧🇦",code:"BIH",n:20,group:"B"},
+  // GRUPO C
+  {name:"Brasil",flag:"🇧🇷",code:"BRA",n:20,group:"C"},
+  {name:"Marruecos",flag:"🇲🇦",code:"MAR",n:20,group:"C"},
+  {name:"Haití",flag:"🇭🇹",code:"HAI",n:20,group:"C"},
+  {name:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",code:"SCO",n:20,group:"C"},
+  // GRUPO D
+  {name:"EE.UU.",flag:"🇺🇸",code:"USA",n:20,group:"D"},
+  {name:"Paraguay",flag:"🇵🇾",code:"PAR",n:20,group:"D"},
+  {name:"Australia",flag:"🇦🇺",code:"AUS",n:20,group:"D"},
+  {name:"Turquía",flag:"🇹🇷",code:"TUR",n:20,group:"D"},
+  // GRUPO E
+  {name:"Alemania",flag:"🇩🇪",code:"GER",n:20,group:"E"},
+  {name:"Curazao",flag:"🇨🇼",code:"CUW",n:20,group:"E"},
+  {name:"Costa de Marfil",flag:"🇨🇮",code:"CIV",n:20,group:"E"},
+  {name:"Ecuador",flag:"🇪🇨",code:"ECU",n:20,group:"E"},
+  // GRUPO F
+  {name:"Países Bajos",flag:"🇳🇱",code:"NED",n:20,group:"F"},
+  {name:"Japón",flag:"🇯🇵",code:"JPN",n:20,group:"F"},
+  {name:"Túnez",flag:"🇹🇳",code:"TUN",n:20,group:"F"},
+  {name:"Suecia",flag:"🇸🇪",code:"SWE",n:20,group:"F"},
+  // GRUPO G
+  {name:"Bélgica",flag:"🇧🇪",code:"BEL",n:20,group:"G"},
+  {name:"Egipto",flag:"🇪🇬",code:"EGY",n:20,group:"G"},
+  {name:"Irán",flag:"🇮🇷",code:"IRN",n:20,group:"G"},
+  {name:"Nueva Zelanda",flag:"🇳🇿",code:"NZL",n:20,group:"G"},
+  // GRUPO H
+  {name:"España",flag:"🇪🇸",code:"ESP",n:20,group:"H"},
+  {name:"Cabo Verde",flag:"🇨🇻",code:"CPV",n:20,group:"H"},
+  {name:"Arabia Saudita",flag:"🇸🇦",code:"KSA",n:20,group:"H"},
+  {name:"Uruguay",flag:"🇺🇾",code:"URU",n:20,group:"H"},
+  // GRUPO I
+  {name:"Francia",flag:"🇫🇷",code:"FRA",n:20,group:"I"},
+  {name:"Senegal",flag:"🇸🇳",code:"SEN",n:20,group:"I"},
+  {name:"Noruega",flag:"🇳🇴",code:"NOR",n:20,group:"I"},
+  {name:"Irak",flag:"🇮🇶",code:"IRQ",n:20,group:"I"},
+  // GRUPO J
+  {name:"Argentina",flag:"🇦🇷",code:"ARG",n:20,group:"J"},
+  {name:"Argelia",flag:"🇩🇿",code:"ALG",n:20,group:"J"},
+  {name:"Austria",flag:"🇦🇹",code:"AUT",n:20,group:"J"},
+  {name:"Jordania",flag:"🇯🇴",code:"JOR",n:20,group:"J"},
+  // GRUPO K
+  {name:"Portugal",flag:"🇵🇹",code:"POR",n:20,group:"K"},
+  {name:"Colombia",flag:"🇨🇴",code:"COL",n:20,group:"K"},
+  {name:"Uzbekistán",flag:"🇺🇿",code:"UZB",n:20,group:"K"},
+  {name:"Ghana",flag:"🇬🇭",code:"GHA",n:20,group:"K"},
+  // GRUPO L
+  {name:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",code:"ENG",n:20,group:"L"},
+  {name:"Panamá",flag:"🇵🇦",code:"PAN",n:20,group:"L"},
+  {name:"Croacia",flag:"🇭🇷",code:"CRO",n:20,group:"L"},
+  {name:"RD Congo",flag:"🇨🇩",code:"COD",n:20,group:"L"},
 ];
-const ESPECIALES=[{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
+const ESPECIALES=[{name:"FWC",flag:"🌍",code:"FWC",n:9,stickers:Array.from({length:9},(_,i)=>"FWC-"+(i+1))},{name:"Láminas Especiales",flag:"⭐",code:"SPEC",n:20,stickers:Array.from({length:20},(_,i)=>"E-"+(i+1))}];
 const CRACKS=[{name:"Los Cracks",flag:"⚽",code:"CRK",n:24,stickers:Array.from({length:24},(_,i)=>"CRK-"+(i+1))}];
 TEAMS.forEach(t=>{t.stickers=Array.from({length:t.n},(_,i)=>t.code+"-"+(i+1));});
 
@@ -539,9 +551,15 @@ function renderGroup(groups,gridId,searchId){
   if(countryFilter==='done')list=list.filter(t=>getGroupHave(t)===t.n);
   const grid=document.getElementById(gridId);if(!grid)return;
   if(!list.length){grid.innerHTML='<div style="color:var(--text3);padding:20px;font-size:13px">Sin resultados</div>';return;}
-  grid.innerHTML=list.map(t=>{
+  let lastGroup='';
+  let html='';
+  list.forEach(t=>{
+    if(t.group && t.group!==lastGroup){
+      lastGroup=t.group;
+      html+=`<div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:${html?'18px':'0'} 0 4px"><div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);background:var(--orange-glow);border:1px solid rgba(249,115,22,0.25);padding:4px 12px;border-radius:999px">GRUPO ${t.group}</div><div style="flex:1;height:1px;background:var(--border)"></div></div>`;
+    }
     const have=getGroupHave(t),pct=Math.round(have/t.n*100),isOpen=!!openCards[t.code],complete=have===t.n;
-    return`<div class="country-card${isOpen?' expanded':''}" id="cc-${t.code}">
+    html+=`<div class="country-card${isOpen?' expanded':''}" id="cc-${t.code}">
       <div class="cc-header" onclick="toggleCard('${t.code}','${gridId}','${searchId||''}')">
         <span class="cc-flag">${t.flag}</span>
         <span class="cc-name">${t.name}</span>
@@ -550,7 +568,8 @@ function renderGroup(groups,gridId,searchId){
       <div class="cc-bar"><div class="cc-fill" style="width:${pct}%"></div></div>
       ${isOpen?`<div class="stickers-wrap"><div class="stickers-label">Toca para marcar</div><div class="stickers-grid">${t.stickers.map(s=>`<div class="fig ${state[s]?'have':'need'}" id="fig-${s}" onclick="toggleFig('${s}')"><div class="fig-code">${s}</div><div class="fig-dot">${state[s]?'●':'○'}</div></div>`).join('')}</div></div>`:''}
     </div>`;
-  }).join('');
+  });
+  grid.innerHTML=html;
 }
 function renderCountries(){renderGroup(TEAMS,'countries-grid','country-search');}
 function renderEspeciales(){renderGroup(ESPECIALES,'esp-grid',null);}
